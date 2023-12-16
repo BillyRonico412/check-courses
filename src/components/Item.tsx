@@ -1,16 +1,10 @@
-import { useSetAtom } from "jotai"
-import {
-	forwardRef,
-	useCallback,
-	useImperativeHandle,
-	useMemo,
-	useRef,
-} from "react"
-import { LuX } from "react-icons/lu"
-import { ItemInterface, itemsCheckedAtom, itemsNotCheckedAtom } from "../main"
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
+import { useSetAtom } from "jotai"
+import { useCallback, useMemo } from "react"
+import { LuX } from "react-icons/lu"
 import { MdOutlineDragIndicator } from "react-icons/md"
+import { ItemInterface, itemsCheckedAtom, itemsNotCheckedAtom } from "../main"
 
 interface ItemProps {
 	item: ItemInterface
@@ -18,27 +12,9 @@ interface ItemProps {
 	index: number
 }
 
-export interface ItemRefInterface {
-	scrollIntoView: () => void
-}
-
-export const Item = forwardRef<ItemRefInterface, ItemProps>((props, ref) => {
+export const Item = (props: ItemProps) => {
 	const setItemsChecked = useSetAtom(itemsCheckedAtom)
 	const setItemsNotChecked = useSetAtom(itemsNotCheckedAtom)
-
-	const itemRef = useRef<HTMLDivElement | null>(null)
-
-	useImperativeHandle(ref, () => ({
-		scrollIntoView() {
-			if (itemRef.current === null) {
-				return
-			}
-			itemRef.current.scrollIntoView({
-				behavior: "smooth",
-				block: "nearest",
-			})
-		},
-	}))
 
 	const setItems = useMemo(() => {
 		switch (props.type) {
@@ -83,10 +59,7 @@ export const Item = forwardRef<ItemRefInterface, ItemProps>((props, ref) => {
 			className={`flex gap-x-2 items-center ${
 				props.type === "check" && "line-through"
 			}`}
-			ref={(currentRef) => {
-				setNodeRef(currentRef)
-				itemRef.current = currentRef
-			}}
+			ref={setNodeRef}
 			style={style}
 			{...attributes}
 		>
@@ -108,4 +81,4 @@ export const Item = forwardRef<ItemRefInterface, ItemProps>((props, ref) => {
 			</button>
 		</div>
 	)
-})
+}

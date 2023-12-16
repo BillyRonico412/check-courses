@@ -14,9 +14,9 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable"
 import { useAtom } from "jotai"
-import { useCallback, useEffect, useMemo, useRef } from "react"
+import { useCallback, useMemo } from "react"
 import { itemsCheckedAtom, itemsNotCheckedAtom } from "../main"
-import { Item, ItemRefInterface } from "./Item"
+import { Item } from "./Item"
 
 interface ListProps {
 	type: "check" | "uncheck"
@@ -42,24 +42,6 @@ export const Items = (props: ListProps) => {
 				return setItemsNotChecked
 		}
 	}, [props.type, setItemsChecked, setItemsNotChecked])
-
-	const itemsLengthRef = useRef<number | undefined>(undefined)
-
-	const itemLastRef = useRef<ItemRefInterface | null>(null)
-
-	useEffect(() => {
-		if (
-			itemsLengthRef.current === undefined ||
-			itemsLengthRef.current > itemsNotChecked.length + itemsChecked.length
-		) {
-			itemsLengthRef.current = itemsNotChecked.length + itemsChecked.length
-			return
-		}
-		if (itemsLengthRef.current < itemsNotChecked.length + itemsChecked.length) {
-			itemLastRef.current?.scrollIntoView()
-			itemsLengthRef.current = itemsNotChecked.length + itemsChecked.length
-		}
-	}, [itemsChecked, itemsNotChecked])
 
 	const sensors = useSensors(
 		useSensor(PointerSensor),
@@ -95,17 +77,7 @@ export const Items = (props: ListProps) => {
 		>
 			<SortableContext items={items} strategy={verticalListSortingStrategy}>
 				{items.map((item, index) => (
-					<Item
-						key={item.id}
-						index={index}
-						item={item}
-						type={props.type}
-						ref={(currentRef) => {
-							if (props.type === "uncheck" && index === items.length - 1) {
-								itemLastRef.current = currentRef
-							}
-						}}
-					/>
+					<Item key={item.id} index={index} item={item} type={props.type} />
 				))}
 			</SortableContext>
 		</DndContext>
