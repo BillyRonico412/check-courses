@@ -18,14 +18,11 @@ export const Items = (props: ListProps) => {
 				return itemsNotChecked
 		}
 	}, [props.type, itemsChecked, itemsNotChecked])
-	console.log(items)
 	return (
 		<>
-			{items.map((item, index) => {
-				return (
-					<Item key={item.id} index={index} item={item} type={props.type} />
-				)
-			})}
+			{items.map((item, index) => (
+				<Item key={item.id} index={index} item={item} type={props.type} />
+			))}
 		</>
 	)
 }
