@@ -5,9 +5,9 @@ import { Nav } from "./components/Nav"
 
 export const App = () => {
 	return (
-		<div className="p-4 flex flex-col gap-y-4 w-screen h-screen">
+		<div className="flex flex-col gap-y-4 w-screen h-screen py-4">
 			<p className="text-xl font-bold text-center">Courses</p>
-			<div className="flex-grow">
+			<div className="flex-grow overflow-hidden">
 				<Switch>
 					<Route path="/list">
 						<List />

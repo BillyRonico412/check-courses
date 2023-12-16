@@ -2,25 +2,24 @@ import { useSetAtom } from "jotai"
 import { nanoid } from "nanoid"
 import { useCallback, useState } from "react"
 import { LuPlus } from "react-icons/lu"
-import { itemsCheckedAtom } from "../main"
+import { itemsNotCheckedAtom } from "../main"
 
 export const Adder = () => {
-	const setItemsChecked = useSetAtom(itemsCheckedAtom)
+	const setItemsNotChecked = useSetAtom(itemsNotCheckedAtom)
 	const [name, setName] = useState("")
 	const addItem = useCallback(() => {
 		if (name === "") {
 			return
 		}
-		setItemsChecked((prev) => [
+		setItemsNotChecked((prev) => [
 			...prev,
 			{
 				id: nanoid(),
 				name,
-				checked: false,
 			},
 		])
 		setName("")
-	}, [name, setItemsChecked])
+	}, [name, setItemsNotChecked])
 	return (
 		<div className="flex gap-x-2">
 			<input

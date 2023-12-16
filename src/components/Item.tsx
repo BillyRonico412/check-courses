@@ -1,7 +1,16 @@
 import { useSetAtom } from "jotai"
-import { useCallback, useMemo } from "react"
+import {
+	forwardRef,
+	useCallback,
+	useImperativeHandle,
+	useMemo,
+	useRef,
+} from "react"
 import { LuX } from "react-icons/lu"
 import { ItemInterface, itemsCheckedAtom, itemsNotCheckedAtom } from "../main"
+import { useSortable } from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
+import { MdOutlineDragIndicator } from "react-icons/md"
 
 interface ItemProps {
 	item: ItemInterface
@@ -9,9 +18,28 @@ interface ItemProps {
 	index: number
 }
 
-const Item = (props: ItemProps) => {
+export interface ItemRefInterface {
+	scrollIntoView: () => void
+}
+
+export const Item = forwardRef<ItemRefInterface, ItemProps>((props, ref) => {
 	const setItemsChecked = useSetAtom(itemsCheckedAtom)
 	const setItemsNotChecked = useSetAtom(itemsNotCheckedAtom)
+
+	const itemRef = useRef<HTMLDivElement | null>(null)
+
+	useImperativeHandle(ref, () => ({
+		scrollIntoView() {
+			if (itemRef.current === null) {
+				return
+			}
+			itemRef.current.scrollIntoView({
+				behavior: "smooth",
+				block: "nearest",
+			})
+		},
+	}))
+
 	const setItems = useMemo(() => {
 		switch (props.type) {
 			case "check":
@@ -29,23 +57,40 @@ const Item = (props: ItemProps) => {
 	}, [props.index, setItems])
 	const changeChecked = useCallback(() => {
 		switch (props.type) {
-			case "check":
+			case "check": {
 				setItemsNotChecked((prev) => [...prev, props.item])
 				deleteItem()
 				break
-			case "uncheck":
+			}
+			case "uncheck": {
 				setItemsChecked((prev) => [...prev, props.item])
 				deleteItem()
 				break
+			}
 		}
 	}, [props.item, props.type, setItemsChecked, setItemsNotChecked, deleteItem])
+
+	const { attributes, listeners, setNodeRef, transform, transition } =
+		useSortable({ id: props.item.id })
+
+	const style = {
+		transform: CSS.Transform.toString(transform),
+		transition,
+	}
 
 	return (
 		<div
 			className={`flex gap-x-2 items-center ${
-				props.type === "uncheck" && "line-through"
+				props.type === "check" && "line-through"
 			}`}
+			ref={(currentRef) => {
+				setNodeRef(currentRef)
+				itemRef.current = currentRef
+			}}
+			style={style}
+			{...attributes}
 		>
+			<MdOutlineDragIndicator {...listeners} />
 			<label className="flex gap-x-2 flex-grow">
 				<input
 					type="checkbox"
@@ -63,6 +108,4 @@ const Item = (props: ItemProps) => {
 			</button>
 		</div>
 	)
-}
-
-export default Item
+})

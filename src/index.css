@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  touch-action: none;
+}
+
 body {
   font-family: 'Preahvihear', sans-serif;
 }

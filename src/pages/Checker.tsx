@@ -26,7 +26,7 @@ export const Checker = () => {
 	})
 	if (itemsChecked.length === 0) {
 		return (
-			<div>
+			<div className="w-full h-full flex justify-center items-center text-lg">
 				<p>Nothing to check!</p>
 			</div>
 		)
@@ -34,7 +34,7 @@ export const Checker = () => {
 
 	if (index >= itemsChecked.length) {
 		return (
-			<div>
+			<div className="w-full h-full flex justify-center items-center text-lg">
 				<p>Nothing to check!</p>
 			</div>
 		)

@@ -4,7 +4,7 @@ import { useLocation } from "wouter"
 export const Nav = () => {
 	const [, setLocation] = useLocation()
 	return (
-		<nav className="flex gap-x-4 rounded">
+		<nav className="flex gap-x-4 rounded px-4">
 			<button
 				type="button"
 				className="flex justify-center items-center flex-grow py-2 bg-gray-100 rounded shadow"

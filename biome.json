@@ -8,10 +8,16 @@
 		"rules": {
 			"all": true,
 			"style": {
+				"all": true,
 				"useNamingConvention": "off"
 			},
 			"nursery": {
+				"all": true,
 				"useImportRestrictions": "off"
+			},
+			"complexity": {
+				"all": true,
+				"useSimplifiedLogicExpression": "off"
 			}
 		}
 	},
